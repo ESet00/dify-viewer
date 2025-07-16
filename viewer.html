@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>生成画像ビューア</title>
+</head>
+<body>
+  <h2>生成された画像</h2>
+  <div id="image-area">読み込み中...</div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const imgSrc = params.get('img');
+    const area = document.getElementById('image-area');
+
+    if (imgSrc && imgSrc.startsWith('data:image')) {
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.style.maxWidth = '100%';
+      area.innerHTML = '';
+      area.appendChild(img);
+    } else {
+      area.innerText = '画像が見つかりませんでした。';
+    }
+  </script>
+</body>
+</html>
