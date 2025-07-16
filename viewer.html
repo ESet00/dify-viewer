@@ -1,28 +1,48 @@
-<!-- 修正済み viewer.html の例 -->
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>生成画像ビューア</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 2em;
+    }
+    input {
+      margin-bottom: 1em;
+    }
+    img {
+      max-width: 90%;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-  <h1>画像ビューア</h1>
-  <input type="file" id="upload" accept="text/plain" />
+  <h1>生成画像ビューア</h1>
+  <p>Base64文字列を含む `.txt` ファイルを選択してください：</p>
+  <input type="file" id="upload" accept=".txt,text/plain">
   <div id="output"></div>
 
   <script>
     document.getElementById('upload').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
       const reader = new FileReader();
       reader.onload = function () {
         const base64 = reader.result.trim();
+        if (!base64.startsWith("data:image/")) {
+          document.getElementById('output').innerHTML = "⚠️ 不正なBase64形式です";
+          return;
+        }
         const img = document.createElement('img');
         img.src = base64;
-        img.alt = '生成画像';
-        img.style.maxWidth = '100%';
+        img.alt = "生成画像";
         document.getElementById('output').innerHTML = '';
         document.getElementById('output').appendChild(img);
       };
-      reader.readAsText(e.target.files[0]);
+      reader.readAsText(file);
     });
   </script>
 </body>
